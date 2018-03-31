@@ -12,7 +12,7 @@ $ npm install -g renovate
 
 #### Docker
 
-Renovate is available for Docker via an automated build [renovate/renovate](https://https://hub.docker.com/r/renovate/renovate/). It builds `latest` based on the `master` branch and all semver tags are published too. All the following are valid:
+Renovate is available for Docker via an automated build [renovate/renovate](https://hub.docker.com/r/renovate/renovate/). It builds `latest` based on the `master` branch and all semver tags are published too. All the following are valid:
 
 ```
 $ docker run renovate/renovate
@@ -51,7 +51,7 @@ Run `renovate --help` for usage details.
 Note: The first time you run `renovate` on a repository, it will not upgrade any
 dependencies. Instead, it will create a Pull Request (Merge Request if GitLab)
 called 'Configure Renovate' and commit a default `renovate.json` file to the
-repository. This PR can be close unmerged if the default settings are fine for
+repository. This PR can be closed as unmerged if the default settings are fine for
 you. Also, this behaviour can be disabled if you set the `onboarding`
 configuration option to `false` before running.
 

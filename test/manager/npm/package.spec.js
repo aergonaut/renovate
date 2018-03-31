@@ -48,22 +48,6 @@ describe('lib/workers/package/npm', () => {
       expect(res[0].type).toEqual('warning');
       expect(npmApi.getDependency.mock.calls.length).toBe(1);
     });
-    it('returns warning if no npm dep found and lock file', async () => {
-      config.packageLock = 'some package lock';
-      const res = await npm.getPackageUpdates(config);
-      expect(res).toMatchSnapshot();
-      expect(res).toHaveLength(1);
-      expect(res[0].type).toEqual('warning');
-      expect(npmApi.getDependency.mock.calls.length).toBe(1);
-    });
-    it('returns error if no npm scoped dep found', async () => {
-      config.depName = '@foo/something';
-      config.yarnLock = '# some yarn lock';
-      const res = await npm.getPackageUpdates(config);
-      expect(res).toMatchSnapshot();
-      expect(res).toHaveLength(1);
-      expect(res[0].type).toEqual('warning');
-    });
     it('returns warning if warning found', async () => {
       npmApi.getDependency.mockReturnValueOnce({});
       versions.determineUpgrades = jest.fn(() => [

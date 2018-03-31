@@ -16,6 +16,10 @@ Array [
   },
   Object {
     "depName": "Configuration Error",
+    "message": "Invalid timezone: Asia",
+  },
+  Object {
+    "depName": "Configuration Error",
     "message": "Configuration option \`labels\` should be a list (Array)",
   },
   Object {
@@ -28,7 +32,19 @@ Array [
   },
   Object {
     "depName": "Configuration Error",
+    "message": "Invalid timezone: Europe/Brussel",
+  },
+  Object {
+    "depName": "Configuration Error",
     "message": "Invalid configuration option: \`foo\`",
+  },
+  Object {
+    "depName": "Configuration Error",
+    "message": "Each packageRule must contain at least one selector (packageNames, packagePatterns, excludePackageNames, excludePackagePatterns). If you wish for configuration to apply to all packages, it is not necessary to place it inside a packageRule at all.",
+  },
+  Object {
+    "depName": "Configuration Error",
+    "message": "packageRules must contain JSON objects",
   },
 ]
 `;

@@ -8,7 +8,7 @@ type: Document
 order: 0
 ---
 
-This document describes all the configuration options you may configure in a `renovate.json` file or within a `"renovate"` section of your `package.json`. Note that any config in a `package.json` will apply only to that package file, so this is also one way you can specify different behaviour for different `package.json files`. Similarly, if you have a monorepo and want your config to apply to all package files then you need to define it in a `renovate.json`;
+This document describes all the configuration options you may configure in a `renovate.json` file or within a `"renovate"` section of your `package.json`. Any config you define applies to the whole repository (e.g. if you have a monorepo).
 
 Also, be sure to check out Renovate's [shareable config presets](/docs/configuration-reference/config-presets) to save yourself from reinventing any wheels.
 
@@ -148,6 +148,15 @@ Bump the version in the package.json being updated
 
 Set this value to 'patch', 'minor' or 'major' to have Renovate update the version in your edited `package.json`. e.g. if you wish Renovate to always increase the target `package.json` version with a patch update, set this to `patch`.
 
+## circleci
+
+Configuration object for CircleCI yaml file renovation. Also inherits settings from `docker` object.
+
+| name    | value             |
+| ------- | ----------------- |
+| type    | object            |
+| default | { enabled: true } |
+
 ## commitBody
 
 Commit body template
@@ -238,6 +247,15 @@ Configuration specific for Dockerfile updates.
 | type    | object                                        |
 | default | { enabled: true, major: { enabled: false }, } |
 
+## docker-compose
+
+Configuration object for Docker Compose yaml file renovation. Also inherits settings from `docker` object.
+
+| name    | value             |
+| ------- | ----------------- |
+| type    | object            |
+| default | { enabled: true } |
+
 ## enabled
 
 Enable or disable Renovate.
@@ -267,6 +285,28 @@ To disable Renovate for `dependencies` but keep it for `devDependencies` you cou
   "enabled": false
 }
 ```
+
+## enabledManagers
+
+A list of package managers to enable. If defined, then all managers not on the list are disabled.
+
+| name    | value |
+| ------- | ----- |
+| type    | list  |
+| default | []    |
+
+This is a way to "whitelist" certain package managers and disable all others.
+
+By default, as Renovate supports more package managers we enable them once they are stable, but for some people only interested in perhaps npm dependencies, it can feel like "whack-a-mole" to keep disabling new ones you don't want.
+
+This works for both managers (e.g. npm, circleci, nvm, etc) as well as "parent" managers (docker or node).
+
+Example:
+
+````json
+{
+  "enabledManagers": ["npm"]
+}
 
 ## encrypted
 
@@ -368,7 +408,7 @@ By default, Renovate will "slugify" the groupName to determine the branch name. 
 ```json
   "groupName": "eslint packages",
   "groupSlug": "eslint"
-```
+````
 
 And then the branchName would be `renovate/eslint` instead.
 
@@ -735,11 +775,9 @@ Whether to convert ranged versions in `package.json` to pinned versions.
 | name    | value   |
 | ------- | ------- |
 | type    | boolean |
-| default | true    |
+| default | null    |
 
-This is a very important feature to consider, because not every repository's requirements are the same. Although Renovate's default value for pinVersions is `true` - i.e. pin versions of all dependencies, there are cases where you may want to keep ranges, for example if your project is a web library that is consumed by others. In that case, you may wish to keep ranges for `dependencies` but pin versions for `devDependencies`, for example.
-
-When creating the onboarding PR, Renovate will try to detect the best setting for `pinVersions` and apply that in the `renovate.json` file. In most cases it will suggest pinning `devDependencies` and ranges for everything else, however if a repository's `package.json` files are flagged as `private` then Renovate will recommend pinning all dependencies.
+This is a very important feature to consider, because not every repository's requirements are the same. The default value for this field is `null`, which means Renovate attempts to autodetect what's best for the project. `devDependencies` in `package.json` will alway be pinned, but `dependencies` will only be pinned if the package is `private` or has no `main` entry defined - both indicators that it is not intended to be published and consumed by other packages. If you wish to override this autodetection you can configure `pinVersions` either at the top level or within configuration objects such as `dependencies` or `devDependencies`.
 
 ## prBody
 
@@ -1070,6 +1108,15 @@ Regex for identifying unstable versions (docker only)
 Because Docker uses tags instead of semver, there is no fixed convention for how to identify unstable releases. e.g. some images may use semver convention like `v2.0.0-beta1` but others may use their own convention, like Node.js or Ubuntu even/odd.
 
 This field is currently used by some config prefixes.
+
+## updateLockFiles
+
+Set to false to disable lock file updating.
+
+| name    | value   |
+| ------- | ------- |
+| type    | boolean |
+| default | true    |
 
 ## updateNotScheduled
 
